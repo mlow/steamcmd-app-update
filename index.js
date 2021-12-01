@@ -45,15 +45,22 @@ function getOutputStream() {
 
 const validateFlag = !!process.env.FORCE_VALIDATE ? " -validate" : "";
 
-steam.getUserOwnedGames(STEAM_PROFILE_ID).then((games) => {
-  const stream = getOutputStream();
-  games
-    .filter((game) => !shouldSkip(game.appID, game.name))
-    .sort((a, b) => a.appID - b.appID)
-    .forEach((game) => {
-      stream.write(
-        `// ${game.name} - https://store.steampowered.com/app/${game.appID}\n`
-      );
-      stream.write(`app_update ${game.appID}${validateFlag}\n`);
-    });
-});
+steam
+  .getUserOwnedGames(STEAM_PROFILE_ID)
+  .then((games) => {
+    const stream = getOutputStream();
+    games
+      .filter((game) => !shouldSkip(game.appID, game.name))
+      .sort((a, b) => a.appID - b.appID)
+      .forEach((game) => {
+        stream.write(
+          `// ${game.name} - https://store.steampowered.com/app/${game.appID}\n`
+        );
+        stream.write(`app_update ${game.appID}${validateFlag}\n`);
+      });
+    stream.end();
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
