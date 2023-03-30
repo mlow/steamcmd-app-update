@@ -5,7 +5,7 @@ const STEAM_API_KEY = process.env.STEAM_API_KEY;
 
 if (!STEAM_API_KEY) {
   console.error(
-    "The STEAM_API_KEY environment variale should contain your Steam API key."
+    "The STEAM_API_KEY environment variable should contain your Steam API key."
   );
   console.error("See: https://steamcommunity.com/dev/apikey");
   process.exit(1);
